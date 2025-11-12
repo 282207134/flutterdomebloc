@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
 // 事件定义 - 用户可以执行的所有操作
 abstract class CounterEvent extends Equatable {
@@ -202,11 +205,14 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
   // 批量操作
   void performBatchOperations() {
-    const Batch<CounterEvent>([
-      Increment(),
-      Increment(),
-      AsyncIncrement(),
-    ]).forEach(add);
+    final events = <CounterEvent>[
+      const Increment(),
+      const Increment(),
+      const AsyncIncrement(),
+    ];
+    for (final event in events) {
+      add(event);
+    }
   }
 
   // 条件性添加事件
@@ -276,7 +282,7 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
   }
 }
 
-// 防抖转换器
+// 防抖转换器 - 使用 bloc_concurrency
 EventTransformer<T> debounce<T>(Duration duration) {
   return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }

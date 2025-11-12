@@ -314,17 +314,44 @@ const Batch<CounterEvent>([
 
 ## 运行示例
 
-1. 安装依赖：
-```bash
-flutter pub get
-```
+### 前置条件
+- Flutter SDK >=3.10.0
+- Dart SDK >=3.0.0
 
-2. 运行应用：
-```bash
-flutter run
-```
+### 安装和运行
 
-3. 尝试各种操作来了解 BLoC 的工作方式
+1. **克隆或下载项目**
+   ```bash
+   git clone <repository-url>
+   cd bloc-methods-sample
+   ```
+
+2. **安装依赖**
+   ```bash
+   flutter pub get
+   ```
+
+3. **运行应用**
+   ```bash
+   flutter run
+   ```
+
+4. **运行测试**
+   ```bash
+   flutter test
+   ```
+
+5. **代码分析**
+   ```bash
+   flutter analyze
+   ```
+
+### 在没有Flutter环境的情况下
+
+如果你没有安装Flutter，仍然可以：
+- 查看源代码学习BLoC的实现方式
+- 阅读文档了解各个方法的使用
+- 参考测试用例理解测试策略
 
 ## 相关资源
 

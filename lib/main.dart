@@ -177,8 +177,11 @@ class CounterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () {
-                          final value = _showSetValueDialog(context);
+                        onPressed: () async {
+                          final value = await _showSetValueDialog(context);
+                          if (value != null) {
+                            context.read<CounterBloc>().add(SetValue(value));
+                          }
                         },
                         child: const Text('设置特定值'),
                       ),
