@@ -40,7 +40,6 @@ class CounterPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 状态显示区域
             Expanded(
               flex: 2,
               child: Card(
@@ -56,7 +55,6 @@ class CounterPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // 使用 BlocBuilder 监听状态变化
                       BlocBuilder<CounterBloc, CounterState>(
                         builder: (context, state) {
                           return Column(
@@ -93,7 +91,6 @@ class CounterPage extends StatelessWidget {
               ),
             ),
 
-            // 基础操作区域
             Expanded(
               flex: 3,
               child: Card(
@@ -115,7 +112,7 @@ class CounterPage extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<CounterBloc>().add(Increment());
+                                context.read<CounterBloc>().add(const Increment());
                               },
                               child: const Text('增加 (+1)'),
                             ),
@@ -124,7 +121,7 @@ class CounterPage extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<CounterBloc>().add(Decrement());
+                                context.read<CounterBloc>().add(const Decrement());
                               },
                               child: const Text('减少 (-1)'),
                             ),
@@ -137,7 +134,7 @@ class CounterPage extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<CounterBloc>().add(Reset());
+                                context.read<CounterBloc>().add(const Reset());
                               },
                               child: const Text('重置'),
                             ),
@@ -146,7 +143,7 @@ class CounterPage extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<CounterBloc>().add(AsyncIncrement());
+                                context.read<CounterBloc>().add(const AsyncIncrement());
                               },
                               child: const Text('异步增加 (+5)'),
                             ),
@@ -159,7 +156,6 @@ class CounterPage extends StatelessWidget {
               ),
             ),
 
-            // 高级操作区域
             Expanded(
               flex: 3,
               child: Card(
@@ -177,11 +173,6 @@ class CounterPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () async {
-                          final value = await _showSetValueDialog(context);
-                          if (value != null) {
-                            context.read<CounterBloc>().add(SetValue(value));
-                          }
                         onPressed: () {
                           _showSetValueDialog(context);
                         },
@@ -214,7 +205,6 @@ class CounterPage extends StatelessWidget {
               ),
             ),
 
-            // BLoC 监听示例
             Expanded(
               flex: 2,
               child: Card(
@@ -230,7 +220,6 @@ class CounterPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // 使用 BlocListener 监听状态变化
                       Expanded(
                         child: BlocListener<CounterBloc, CounterState>(
                           listener: (context, state) {
@@ -316,13 +305,12 @@ class CounterPage extends StatelessWidget {
       ),
     );
 
-    if (value != null) {
+    if (value != null && context.mounted) {
       context.read<CounterBloc>().add(SetValue(value));
     }
   }
 }
 
-// 高级示例页面
 class AdvancedCounterPage extends StatelessWidget {
   const AdvancedCounterPage({super.key});
 
@@ -338,7 +326,6 @@ class AdvancedCounterPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // 使用 BlocSelector 选择特定状态
               BlocSelector<AdvancedCounterBloc, CounterState, int>(
                 selector: (state) => state.value,
                 builder: (context, value) {
@@ -349,12 +336,15 @@ class AdvancedCounterPage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20),
-              // 使用 BlocConsumer 同时监听和构建
               BlocConsumer<AdvancedCounterBloc, CounterState>(
                 listener: (context, state) {
                   if (state is CounterUpdated) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('操作次数: ${context.read<AdvancedCounterBloc>().operationCount}')),
+                      SnackBar(
+                        content: Text(
+                          '操作次数: ${context.read<AdvancedCounterBloc>().operationCount}',
+                        ),
+                      ),
                     );
                   }
                 },
@@ -363,7 +353,7 @@ class AdvancedCounterPage extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          context.read<AdvancedCounterBloc>().add(Increment());
+                          context.read<AdvancedCounterBloc>().add(const Increment());
                         },
                         child: const Text('增加 (防抖)'),
                       ),

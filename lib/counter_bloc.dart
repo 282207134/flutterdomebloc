@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 // 事件定义 - 用户可以执行的所有操作
 abstract class CounterEvent extends Equatable {
@@ -17,13 +14,6 @@ abstract class CounterEvent extends Equatable {
 }
 
 // 增加计数事件
-class Increment extends CounterEvent {}
-
-// 减少计数事件
-class Decrement extends CounterEvent {}
-
-// 重置计数事件
-class Reset extends CounterEvent {}
 class Increment extends CounterEvent {
   const Increment();
 }
@@ -49,7 +39,6 @@ class SetValue extends CounterEvent {
 }
 
 // 异步增加事件
-class AsyncIncrement extends CounterEvent {}
 class AsyncIncrement extends CounterEvent {
   const AsyncIncrement();
 }
@@ -110,22 +99,14 @@ class CounterError extends CounterState {
 
 // BLoC 实现 - 核心业务逻辑
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-  // 构造函数 - 初始化BLoC
   CounterBloc() : super(const CounterInitial()) {
-    // 注册事件处理器
     on<Increment>(_onIncrement);
     on<Decrement>(_onDecrement);
     on<Reset>(_onReset);
     on<SetValue>(_onSetValue);
     on<AsyncIncrement>(_onAsyncIncrement);
-    
-    // 添加事件监听器
-    onEveryEvent(_onEveryEvent);
-    onTransition(_onTransition);
-    onError(_onError);
   }
 
-  // 处理增加事件
   Future<void> _onIncrement(
     Increment event,
     Emitter<CounterState> emit,
@@ -134,7 +115,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(CounterUpdated(value: state.value + 1));
   }
 
-  // 处理减少事件
   Future<void> _onDecrement(
     Decrement event,
     Emitter<CounterState> emit,
@@ -150,7 +130,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     }
   }
 
-  // 处理重置事件
   Future<void> _onReset(
     Reset event,
     Emitter<CounterState> emit,
@@ -159,7 +138,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(const CounterUpdated(value: 0));
   }
 
-  // 处理设置值事件
   Future<void> _onSetValue(
     SetValue event,
     Emitter<CounterState> emit,
@@ -175,7 +153,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(CounterUpdated(value: event.value));
   }
 
-  // 处理异步增加事件
   Future<void> _onAsyncIncrement(
     AsyncIncrement event,
     Emitter<CounterState> emit,
@@ -184,7 +161,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(CounterLoading(value: state.value));
     
     try {
-      // 模拟异步操作
       await Future.delayed(const Duration(seconds: 1));
       emit(CounterUpdated(value: state.value + 5));
     } catch (error) {
@@ -195,54 +171,23 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     }
   }
 
-  // 监听所有事件
-  Future<void> _onEveryEvent(
-    CounterEvent event,
-    Emitter<CounterState> emit,
-  ) async {
-    debugPrint('事件监听: ${event.runtimeType}');
-  }
-
-  // 监听状态转换
-  void _onTransition(
-    Transition<CounterEvent, CounterState> transition,
-  ) {
-    debugPrint('状态转换: ${transition.currentState} -> ${transition.nextState} '
-        'via ${transition.event}');
-  }
-
-  // 错误处理
-  void _onError(Object error, StackTrace stackTrace) {
-    debugPrint('BLoC 错误: $error');
-    debugPrint('堆栈跟踪: $stackTrace');
-  }
-
-  // 添加自定义方法
   void incrementBy(int amount) {
     add(SetValue(state.value + amount));
   }
 
-  // 批量操作
   void performBatchOperations() {
-    final events = <CounterEvent>[
-      const Increment(),
-      const Increment(),
-      const AsyncIncrement(),
+    const events = [
+      Increment(),
+      Increment(),
+      AsyncIncrement(),
     ];
     for (final event in events) {
       add(event);
     }
-    const [
-      Increment(),
-      Increment(),
-      AsyncIncrement(),
-    ].forEach(add);
   }
 
-  // 条件性添加事件
   void conditionalIncrement(bool condition) {
     if (condition) {
-      add(Increment());
       add(const Increment());
     }
   }
@@ -278,18 +223,12 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
   int _operationCount = 0;
 
   AdvancedCounterBloc() : super(const CounterInitial()) {
-    on<Increment>(_onIncrement, transformer: debounce(const Duration(milliseconds: 300)));
+    on<Increment>(
+      _onIncrement,
+      transformer: debounce(const Duration(milliseconds: 300)),
+    );
     on<Decrement>(_onDecrement);
     
-    // 使用 addAll 添加多个事件
-    addAll([const Increment(), const Increment()]);
-  }
-
-  // 使用防抖转换器
-    on<Increment>(_onIncrement);
-    on<Decrement>(_onDecrement);
-    
-    // 添加初始事件
     add(const Increment());
     add(const Increment());
   }
@@ -310,14 +249,8 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(CounterUpdated(value: state.value - 1));
   }
 
-  // 获取操作计数
   int get operationCount => _operationCount;
 
-  // 使用 emit.forEach 处理流
-  void startPeriodicIncrement() {
-    emit.forEach(
-      Stream.periodic(const Duration(seconds: 1), (_) => Increment()),
-      onData: (event) => CounterUpdated(value: state.value + 1),
   Future<void> startPeriodicIncrement() {
     return emit.forEach<CounterEvent>(
       Stream.periodic(const Duration(seconds: 1), (_) => const Increment()),
@@ -325,20 +258,17 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
     );
   }
 
-  // 重写状态流
   @override
   Stream<CounterState> get stream => super.stream.map((state) {
     debugPrint('流状态: $state');
     return state;
   });
 
-  // 使用 addError 添加错误
   void simulateError() {
     addError('模拟错误', StackTrace.current);
   }
 }
 
-// 防抖转换器 - 使用 bloc_concurrency
 EventTransformer<T> debounce<T>(Duration duration) {
   return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }
