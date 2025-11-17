@@ -182,6 +182,8 @@ class CounterPage extends StatelessWidget {
                           if (value != null) {
                             context.read<CounterBloc>().add(SetValue(value));
                           }
+                        onPressed: () {
+                          _showSetValueDialog(context);
                         },
                         child: const Text('设置特定值'),
                       ),

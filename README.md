@@ -352,6 +352,17 @@ const Batch<CounterEvent>([
 - 查看源代码学习BLoC的实现方式
 - 阅读文档了解各个方法的使用
 - 参考测试用例理解测试策略
+1. 安装依赖：
+```bash
+flutter pub get
+```
+
+2. 运行应用：
+```bash
+flutter run
+```
+
+3. 尝试各种操作来了解 BLoC 的工作方式
 
 ## 相关资源
 

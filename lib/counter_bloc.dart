@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -21,6 +24,19 @@ class Decrement extends CounterEvent {}
 
 // 重置计数事件
 class Reset extends CounterEvent {}
+class Increment extends CounterEvent {
+  const Increment();
+}
+
+// 减少计数事件
+class Decrement extends CounterEvent {
+  const Decrement();
+}
+
+// 重置计数事件
+class Reset extends CounterEvent {
+  const Reset();
+}
 
 // 设置特定值事件
 class SetValue extends CounterEvent {
@@ -34,6 +50,9 @@ class SetValue extends CounterEvent {
 
 // 异步增加事件
 class AsyncIncrement extends CounterEvent {}
+class AsyncIncrement extends CounterEvent {
+  const AsyncIncrement();
+}
 
 // 状态定义 - 计数器的所有可能状态
 abstract class CounterState extends Equatable {
@@ -213,12 +232,18 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     for (final event in events) {
       add(event);
     }
+    const [
+      Increment(),
+      Increment(),
+      AsyncIncrement(),
+    ].forEach(add);
   }
 
   // 条件性添加事件
   void conditionalIncrement(bool condition) {
     if (condition) {
       add(Increment());
+      add(const Increment());
     }
   }
 
@@ -226,6 +251,25 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   Future<void> close() {
     debugPrint('CounterBloc 正在关闭');
     return super.close();
+  }
+
+  @override
+  void onEvent(CounterEvent event) {
+    debugPrint('事件监听: ${event.runtimeType}');
+    super.onEvent(event);
+  }
+
+  @override
+  void onTransition(Transition<CounterEvent, CounterState> transition) {
+    debugPrint('状态转换: ${transition.currentState} -> ${transition.nextState} via ${transition.event}');
+    super.onTransition(transition);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    debugPrint('BLoC 错误: $error');
+    debugPrint('堆栈跟踪: $stackTrace');
+    super.onError(error, stackTrace);
   }
 }
 
@@ -242,6 +286,14 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
   }
 
   // 使用防抖转换器
+    on<Increment>(_onIncrement);
+    on<Decrement>(_onDecrement);
+    
+    // 添加初始事件
+    add(const Increment());
+    add(const Increment());
+  }
+
   Future<void> _onIncrement(
     Increment event,
     Emitter<CounterState> emit,
@@ -266,6 +318,10 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
     emit.forEach(
       Stream.periodic(const Duration(seconds: 1), (_) => Increment()),
       onData: (event) => CounterUpdated(value: state.value + 1),
+  Future<void> startPeriodicIncrement() {
+    return emit.forEach<CounterEvent>(
+      Stream.periodic(const Duration(seconds: 1), (_) => const Increment()),
+      onData: (_) => CounterUpdated(value: state.value + 1),
     );
   }
 
