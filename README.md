@@ -39,6 +39,8 @@ flutter run
 flutter test
 ```
 
+> **注意**: 如果遇到编译错误，请先运行 `flutter pub get` 确保所有依赖都已正确安装。
+
 详细的设置和运行指南请查看 [QUICKSTART.md](QUICKSTART.md) 和 [SETUP.md](SETUP.md)。
 
 ## 📁 项目结构

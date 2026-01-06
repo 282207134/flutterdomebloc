@@ -62,6 +62,18 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
+### 6. 依赖项说明
+
+> **注意**: 如果遇到 `rxdart` 包相关的编译错误，请确保 `pubspec.yaml` 文件中已包含 `rxdart` 依赖：
+
+```yaml
+dependencies:
+  # ... 其他依赖
+  rxdart: ^0.27.7
+```
+
+然后再次运行 `flutter pub get` 安装新添加的依赖。
+
 ## 项目结构
 
 ```

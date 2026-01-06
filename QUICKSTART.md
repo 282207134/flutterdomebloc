@@ -8,6 +8,8 @@
 flutter pub get
 ```
 
+> **注意**: 如果遇到 `rxdart` 包相关的编译错误，请检查 `pubspec.yaml` 文件中是否已包含 `rxdart` 依赖，如没有请添加并再次运行 `flutter pub get`。
+
 ### 第二步：运行应用
 
 ```bash

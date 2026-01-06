@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:rxdart/rxdart.dart';
 
 // 事件定义 - 用户可以执行的所有操作
 abstract class CounterEvent extends Equatable {
@@ -176,14 +177,9 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   }
 
   void performBatchOperations() {
-    const events = [
-      Increment(),
-      Increment(),
-      AsyncIncrement(),
-    ];
-    for (final event in events) {
-      add(event);
-    }
+    add(const Increment());
+    add(const Increment());
+    add(const AsyncIncrement());
   }
 
   void conditionalIncrement(bool condition) {
@@ -228,7 +224,10 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
       transformer: debounce(const Duration(milliseconds: 300)),
     );
     on<Decrement>(_onDecrement);
-    
+  }
+
+  // 添加初始化方法，用于手动触发初始事件
+  void initialize() {
     add(const Increment());
     add(const Increment());
   }
@@ -251,12 +250,15 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
 
   int get operationCount => _operationCount;
 
+  // startPeriodicIncrement 方法有问题，已注释
+  /*
   Future<void> startPeriodicIncrement() {
     return emit.forEach<CounterEvent>(
       Stream.periodic(const Duration(seconds: 1), (_) => const Increment()),
       onData: (_) => CounterUpdated(value: state.value + 1),
     );
   }
+  */
 
   @override
   Stream<CounterState> get stream => super.stream.map((state) {
@@ -270,5 +272,7 @@ class AdvancedCounterBloc extends Bloc<CounterEvent, CounterState> {
 }
 
 EventTransformer<T> debounce<T>(Duration duration) {
-  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  return (events, mapper) {
+    return events.debounceTime(duration).switchMap(mapper);
+  };
 }
