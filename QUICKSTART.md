@@ -159,37 +159,6 @@ flutter: 事件监听: Increment
 flutter: 状态转换: CounterInitial { value: 0, status: initial } -> CounterUpdated { value: 1, status: updated } via Instance of 'Increment'
 ```
 
-### 使用 BLoC Observer
-
-添加全局 BLoC 观察者来监控所有 BLoC 实例：
-
-```dart
-class SimpleBlocObserver extends BlocObserver {
-  @override
-  void onEvent(Bloc bloc, Object? event) {
-    super.onEvent(bloc, event);
-    print('onEvent $event');
-  }
-
-  @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    print('onChange $change');
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print('onTransition $transition');
-  }
-}
-
-void main() {
-  Bloc.observer = SimpleBlocObserver();
-  runApp(MyApp());
-}
-```
-
 ## 💡 最佳实践
 
 1. **事件命名**：使用动词形式（Increment, Reset）
@@ -211,13 +180,6 @@ A: 将 BlocProvider 放在更高层级的 Widget 树中。
 
 **Q: 如何关闭 BLoC？**
 A: BlocProvider 会自动处理，也可以手动调用 bloc.close()。
-
-## 📖 进一步学习
-
-- 阅读 `README.md` 了解详细的 BLoC 概念
-- 阅读 `BLOC_METHODS.md` 查看所有 BLoC 方法
-- 访问 [bloclibrary.dev](https://bloclibrary.dev) 官方文档
-- 探索 [GitHub 示例](https://github.com/felangel/bloc/tree/master/examples)
 
 ## 🎉 恭喜！
 

@@ -45,47 +45,49 @@ class CounterPage extends StatelessWidget {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        '当前状态',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Text(
+                          '当前状态',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      BlocBuilder<CounterBloc, CounterState>(
-                        builder: (context, state) {
-                          return Column(
-                            children: [
-                              Text(
-                                '计数: ${state.value}',
-                                style: const TextStyle(fontSize: 48),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                '状态: ${state.status}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: _getStatusColor(state),
+                        const SizedBox(height: 20),
+                        BlocBuilder<CounterBloc, CounterState>(
+                          builder: (context, state) {
+                            return Column(
+                              children: [
+                                Text(
+                                  '计数: ${state.value}',
+                                  style: const TextStyle(fontSize: 48),
                                 ),
-                              ),
-                              if (state is CounterError) ...[
                                 const SizedBox(height: 10),
                                 Text(
-                                  '错误: ${state.error}',
-                                  style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 14,
+                                  '状态: ${state.status}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: _getStatusColor(state),
                                   ),
                                 ),
+                                if (state is CounterError) ...[
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    '错误: ${state.error}',
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
-                          );
-                        },
-                      ),
-                    ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -96,61 +98,63 @@ class CounterPage extends StatelessWidget {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text(
-                        '基础操作',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          '基础操作',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.read<CounterBloc>().add(const Increment());
-                              },
-                              child: const Text('增加 (+1)'),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.read<CounterBloc>().add(const Increment());
+                                },
+                                child: const Text('增加 (+1)'),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.read<CounterBloc>().add(const Decrement());
-                              },
-                              child: const Text('减少 (-1)'),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.read<CounterBloc>().add(const Decrement());
+                                },
+                                child: const Text('减少 (-1)'),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.read<CounterBloc>().add(const Reset());
-                              },
-                              child: const Text('重置'),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.read<CounterBloc>().add(const Reset());
+                                },
+                                child: const Text('重置'),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.read<CounterBloc>().add(const AsyncIncrement());
-                              },
-                              child: const Text('异步增加 (+5)'),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.read<CounterBloc>().add(const AsyncIncrement());
+                                },
+                                child: const Text('异步增加 (+5)'),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -161,45 +165,47 @@ class CounterPage extends StatelessWidget {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text(
-                        '高级操作',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          '高级操作',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          _showSetValueDialog(context);
-                        },
-                        child: const Text('设置特定值'),
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<CounterBloc>().incrementBy(10);
-                        },
-                        child: const Text('增加10 (自定义方法)'),
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<CounterBloc>().performBatchOperations();
-                        },
-                        child: const Text('批量操作'),
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<CounterBloc>().conditionalIncrement(true);
-                        },
-                        child: const Text('条件增加'),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            _showSetValueDialog(context);
+                          },
+                          child: const Text('设置特定值'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<CounterBloc>().incrementBy(10);
+                          },
+                          child: const Text('增加10 (自定义方法)'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<CounterBloc>().performBatchOperations();
+                          },
+                          child: const Text('批量操作'),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<CounterBloc>().conditionalIncrement(true);
+                          },
+                          child: const Text('条件增加'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -210,44 +216,47 @@ class CounterPage extends StatelessWidget {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'BLoC 监听示例',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'BLoC 监听示例',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: BlocListener<CounterBloc, CounterState>(
-                          listener: (context, state) {
-                            if (state is CounterError) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(state.error),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            } else if (state is CounterLoading) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('正在处理异步操作...'),
-                                  duration: Duration(milliseconds: 500),
-                                ),
-                              );
-                            }
-                          },
-                          child: const Center(
-                            child: Text(
-                              '监听器已激活\n错误和加载状态会显示提示',
-                              textAlign: TextAlign.center,
+                        const SizedBox(height: 16),
+                        Container(
+                          height: 100,
+                          child: BlocListener<CounterBloc, CounterState>(
+                            listener: (context, state) {
+                              if (state is CounterError) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(state.error),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              } else if (state is CounterLoading) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('正在处理异步操作...'),
+                                    duration: Duration(milliseconds: 500),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Center(
+                              child: Text(
+                                '监听器已激活\n错误和加载状态会显示提示',
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
